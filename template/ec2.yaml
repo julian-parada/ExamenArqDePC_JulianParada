@@ -43,7 +43,7 @@ Resources:
             <div class="card">
               <h1>Examen Final Arquitectura de Computadores</h1>
               <p><strong>Nombre:</strong> Dairo Julian Parada Reyes</p>
-              <p><strong>Código:</strong> TU_CODIGO_AQUI</p>
+              <p><strong>Código:</strong> 0192288</p>
               <script>
                 document.querySelector('h1').style.animation = 'none';
                 console.log('Pagina cargada correctamente');
