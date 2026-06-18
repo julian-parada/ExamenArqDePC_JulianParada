@@ -16,7 +16,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t2.micro
-      ImageId: ami-0c101f26f147fa7fd   # Amazon Linux 2023 us-east-1
+      ImageId: ami-0c101f26f147fa7fd
       SecurityGroups:
         - !Ref ExamenSecurityGroup
       UserData:
@@ -45,7 +45,6 @@ Resources:
               <p><strong>Nombre:</strong> Dairo Julian Parada Reyes</p>
               <p><strong>Código:</strong> 0192288</p>
               <script>
-                document.querySelector('h1').style.animation = 'none';
                 console.log('Pagina cargada correctamente');
               </script>
             </div>
