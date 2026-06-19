@@ -1,0 +1,37 @@
+name: Deploy EC2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codigo
+        uses: actions/checkout@v3
+
+      - name: Configurar credenciales AWS
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Validar template CloudFormation
+        run: |
+          aws cloudformation validate-template \
+            --template-body file://template/ec2.yaml
+
+      - name: Desplegar stack CloudFormation
+        run: |
+          aws cloudformation deploy \
+            --template-file template/ec2.yaml \
+            --stack-name ExamenFinalStack \
+            --capabilities CAPABILITY_IAM
+
+      - name: Mostrar IP publica
+        run: |
+          aws cloudformation describe-stacks \
+            --stack-name ExamenFinalStack \
+            --query "Stacks[0].Outputs[?OutputKey=='PublicIP'].OutputValue" \
+            --output text

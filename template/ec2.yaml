@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: EC2 con pagina web - Examen Final
+
+Resources:
+  ExamenSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Acceso HTTP puerto 80
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  ExamenEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-0c101f26f147fa7fd   # Amazon Linux 2023 us-east-1
+      SecurityGroups:
+        - !Ref ExamenSecurityGroup
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          yum update -y
+          yum install -y httpd
+          systemctl start httpd
+          systemctl enable httpd
+          cat > /var/www/html/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="es">
+          <head>
+            <meta charset="UTF-8">
+            <title>Examen Final</title>
+            <style>
+              body { font-family: Arial, sans-serif; background: #1a1a2e; color: #eee; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+              .card { background: #16213e; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 0 30px rgba(0,150,255,0.3); }
+              h1 { color: #00b4d8; }
+              p { font-size: 1.2em; }
+            </style>
+          </head>
+          <body>
+            <div class="card">
+              <h1>Examen Final Arquitectura de Computadores</h1>
+              <p><strong>Nombre:</strong> Dairo Julian Parada Reyes</p>
+              <p><strong>Código:</strong> TU_CODIGO_AQUI</p>
+              <script>
+                document.querySelector('h1').style.animation = 'none';
+                console.log('Pagina cargada correctamente');
+              </script>
+            </div>
+          </body>
+          </html>
+          EOF
+
+Outputs:
+  PublicIP:
+    Description: IP publica de la EC2
+    Value: !GetAtt ExamenEC2.PublicIp
